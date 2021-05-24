@@ -1,16 +1,73 @@
-import tarfile
-import os
-import sys
-import shutil
+from datetime import datetime, timezone
 import json
+import os
+import shutil
+import sys
+import tarfile
+
+""" Library of some useful functions. """
+
+
+def str_date_to_unix(str_date):
+    """ Takes string datetime in a specific format and returns unix time.
+    e.g.: 2021-03-22T17:18:03Z -> 1616429883
+    Parameter:
+        str_date: String. Datetime.
+    Returns:
+        timestamp: int. Unix timestamp.
+    """
+    return int(datetime.strptime(str_date, '%Y-%m-%dT%H:%M:%SZ').timestamp())
+
+
+def unix_to_date_str(unix_time, locale='UTC'):
+    """ Takes an integer timestamp and returns a string with a specific format in UTC.
+    e.g.: 2021-03-22T17:18:03Z -> 1616429883
+    Parameters:
+        unix_time: Int. Timestamp.
+        locale: string. Default UTC. Else will use the local timezone. 
+    Returns:
+        datetime: String. Datetime.
+    """
+    if locale=='UTC':
+        return datetime.utcfromtimestamp(unix_time).strftime('%Y-%m-%dT%H:%M:%SZ')
+    else:
+        return datetime.fromtimestamp(unix_time).strftime('%Y-%m-%dT%H:%M:%SZ')
+    
+
+def get_system_time_unix(locale='UTC'):
+    """ Get the system time and convert it in unix time.
+    Parameter:
+        locale: string. Default UTC. Else will use the local timezone. 
+    Returns:
+        timestamp: int. Unix timestamp.
+    """
+    if locale=='UTC':
+        now = datetime.now(timezone.utc)
+    else:
+        now = datetime.now()
+    return int(now.timestamp())
+    
+
+def get_system_time_string(locale='UTC'):
+    """ Takes the system time and return it in a string datetime.
+    e.g.: 2021-03-22T17:18:03Z
+    Parameter:
+        locale: string. Default UTC. Else will use the local timezone.
+    Returns:
+        datetime: String. Datetime.
+    """
+    if locale=='UTC':
+        return datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
+    else:
+        return datetime.now().strftime('%Y-%m-%dT%H:%M:%SZ')
+
 
 def extract_tgz(filename, out_directory):
-    """Extract a tar gz file in a specific directory.
+    """ Extract a tar gz file in a specific directory.
     Parameter:
         filename: String. Path of the input file.
         out_directory: String. Path of the output directory.
     """
-    # create the structure of the folders.
     tar = tarfile.open(filename, "r:gz")
     tar.extractall(path=out_directory)
     tar.close()
@@ -94,7 +151,7 @@ def create_folder(dir_path):
 
 
 def _read_files(filename1, filename2):
-    """Read the two files and returs two lists containing their lines without trailing newline character.
+    """ Read the two files and returs two lists containing their lines without trailing newline character.
     Parameters:
         filename1: String. First file filename.
         filename2: String. Second file filename.
