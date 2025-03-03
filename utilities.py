@@ -105,7 +105,7 @@ def create_tgz(source_folder, destination_folder, tgz_filename):
                 tar_fd.add(fullname, arcname=fullname.split("\\", 1)[1])
                 for name in dirs: # recursevly compress the folders
                     fullname = os.path.join(root, name)
-                    tar.add(fullname, arcname=fullname.split("\\", 1)[1], recursive=False)
+                    tar_fd.add(fullname, arcname=fullname.split("\\", 1)[1], recursive=False)
     return tgz_path
 
 
