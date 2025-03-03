@@ -105,7 +105,7 @@ def create_tgz(source_folder, destination_folder, tgz_filename):
                 tar_fd.add(fullname, arcname=fullname.split("\\", 1)[1])
                 for name in dirs: # recursevly compress the folders
                     fullname = os.path.join(root, name)
-                    tar_fd.add(fullname, arcname=fullname.split("\\", 1)[1], recursive=False)
+                    tar.add(fullname, arcname=fullname.split("\\", 1)[1], recursive=False)
     return tgz_path
 
 
@@ -215,7 +215,7 @@ def write_json(json_path, d):
         d: dict.
     """
     with open(json_path, 'w') as f:
-        json.dump(d, f)
+        json.dump(d, f, indent=2, sort_keys=True)
 
 
 def is_hex(value):
@@ -242,6 +242,16 @@ def hex_to_bin(value):
         String. Converted value.
     """
     return bin(int(value, 16))[2:]
+
+
+def dec_to_hex(value):
+    """ Convert the input integer to hexadecimal string. 
+    Parameters:
+        value: integer. Value to be converted.
+    Returns:
+        String. Converted value.
+    """
+    return hex(16)[2:]
 
 
 def dec_to_bin(value):
